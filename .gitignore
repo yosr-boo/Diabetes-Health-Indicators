@@ -1,0 +1,4 @@
+# Data files are downloaded from Kaggle (see README)
+data/
+*.csv
+.ipynb_checkpoints/

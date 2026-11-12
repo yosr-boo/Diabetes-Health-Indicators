@@ -1,78 +1,61 @@
-# 📊 Diabetes Health Indicators - Machine Learning Project
+# Diabetes Risk Classification (CDC BRFSS 2015)
 
-## **Overview**
+Six classification models compared on their ability to flag diabetes or prediabetes from self-reported survey answers.
 
-This project aims to develop machine learning models to predict whether an individual has **diabetes**, **prediabetes**, or is **healthy** based on data from the CDC’s Behavioral Risk Factor Surveillance System (BRFSS). By leveraging multiple supervised and unsupervised learning techniques, we compare model performances to identify the most effective approach for diabetes risk prediction.
+## Question
 
-## 🎯 **Objectives**
-- Predict an individual's diabetes status using survey data.
-- Identify key risk factors contributing to diabetes.
-- Optimize models for healthcare applications, focusing on precision, recall, and F1-score.
+How well can lifestyle and health indicators from a phone survey identify people with diabetes or prediabetes, and which model offers the best balance between catching cases (recall) and avoiding false alarms (precision)?
 
-## 🗂️ **Dataset**
-- **Source:** CDC Diabetes Health Indicators Dataset (BRFSS 2015)  
-- **Features:** 21 variables including **age**, **sex**, **BMI**, **blood pressure**, and **cholesterol** levels.  
-- **Target Variable:** `Diabetes_binary` (0 = No Diabetes, 1 = Prediabetes/Diabetes)  
-- **Special Characteristics:**
-  - Balanced dataset (50-50 split for diabetic vs. non-diabetic cases).
-  - Clean data with no missing values.
-  - Pre-encoded target variable for binary classification.
+## Results
 
-## ⚙️ **Technologies & Tools**
-- **Languages:** Python  
-- **Libraries:** scikit-learn, pandas, NumPy, Matplotlib, Seaborn, Keras (for ANN)  
-- **Techniques:**  
-  - **Supervised Learning:** Logistic Regression, Decision Trees, Random Forest, Gradient Boosting Classifier, Neural Network (ANN), K-Nearest Neighbors (KNN)  
-  - **Unsupervised Learning:** K-Means Clustering  
-  - **Optimization:** Hyperparameter tuning, feature selection, normalization (Min-Max Scaling)
+Test set: 30% of 70,692 respondents, classes balanced 50/50.
 
-## 🚀 **Project Workflow**
-1. **Data Preprocessing:**
-   - Cleaning, balancing, and feature scaling using Min-Max Normalization.
-   - Dropping irrelevant features based on correlation analysis.
+| Model | Accuracy | Recall | Precision | F1 |
+|---|---|---|---|---|
+| Gradient boosting | 0.755 | 0.796 | 0.734 | 0.764 |
+| Neural network (2 hidden layers) | 0.748 | 0.847 | 0.704 | 0.769* |
+| Logistic regression | 0.743 | 0.772 | 0.727 | 0.749 |
+| K-nearest neighbours (k = 20) | 0.732 | 0.751 | 0.721 | 0.735 |
+| Random forest (100 trees) | 0.724 | 0.755 | 0.709 | 0.731 |
+| Decision tree | 0.663 | 0.645 | 0.665 | 0.655 |
 
-2. **Exploratory Data Analysis (EDA):**
-   - Visualizations (heatmaps, distribution plots) to understand feature relationships.
-   - K-means clustering to identify natural data groupings.
+\* Computed from the test-set precision and recall.
 
-3. **Model Development:**
-   - **Supervised Learning Models:**  
-     - Logistic Regression  
-     - Decision Tree  
-     - Random Forest  
-     - Gradient Boosting Classifier  
-     - Artificial Neural Network (ANN)  
-     - K-Nearest Neighbors (KNN)
-   - **Evaluation Metrics:**  
-     - Accuracy, Precision, Recall, F1-Score, Confusion Matrix
+- Gradient boosting has the highest accuracy and precision.
+- The neural network finds the most true cases (recall 0.85) at the price of more false positives.
+- Logistic regression is within 1.2 points of the best model on accuracy while staying fully interpretable.
+- In the logistic regression, high blood pressure, high cholesterol and poorer self-rated general health carry the largest positive coefficients.
 
-4. **Model Optimization:**
-   - Hyperparameter tuning for performance enhancement.
-   - Cross-validation for robust evaluation.
+## Data
 
-5. **Feature Importance Analysis:**
-   - Identifying the most predictive risk factors for diabetes, including **High Blood Pressure**, **High Cholesterol**, **General Health**, and **BMI**.
+[Diabetes Health Indicators Dataset](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset), derived from the CDC Behavioral Risk Factor Surveillance System 2015. This project uses the balanced binary file (`diabetes_binary_5050split_health_indicators_BRFSS2015.csv`): 70,692 respondents, 21 features, target `Diabetes_binary` (0 = no diabetes, 1 = prediabetes or diabetes).
 
-## 📊 **Key Results**
-- **Best Model:** Gradient Boosting Classifier  
-  - **Accuracy:** 75.5%  
-  - **Recall:** 79.5% (best at identifying diabetic cases)  
-  - **F1-Score:** 76%  
-- **ANN Performance:** Strong recall (84.7%) but lower precision due to false positives.  
-- **Logistic Regression & Random Forest:** Reliable baseline models with balanced performance.  
-- **KNN:** Simple but less effective with high-dimensional data.
+The data files are not stored in this repository; download them from the link above into a `data/` folder.
 
-## 🧩 **Challenges & Limitations**
-- **Class Imbalance:** Initially tackled through data balancing strategies.
-- **Model Interpretability:** Complex models like ANN and Gradient Boosting are less interpretable compared to Decision Trees.
-- **False Positives:** Trade-offs between recall and precision in healthcare applications.
+## Method
 
-## 🔑 **Insights & Conclusions**
-- **Survey data can predict diabetes risk effectively**, especially with models like Gradient Boosting and ANN.
-- **Top Risk Factors:** High Blood Pressure, High Cholesterol, General Health, Age, and BMI.
-- A **short-form questionnaire** focusing on key features could maintain strong predictive performance.
+1. Exploration: distributions, correlation heatmap, outlier check with the interquartile range.
+2. Four features dropped (`AnyHealthcare`, `NoDocbcCost`, `Income`, `Education`), leaving 17.
+3. 70/30 train/test split; min-max scaling fitted on the training set only.
+4. K-means clustering (elbow and silhouette) as an unsupervised look at structure in the data.
+5. Six supervised models, compared on accuracy, recall, precision and F1.
+6. Feature importance from logistic regression coefficients and tree-based models.
 
-## 📬 **Contact**
-**Yosr Bouhoula**  
-📧 [yosr_bouhoula@outlook.fr](mailto:yosr_bouhoula@outlook.fr)  
-🔗 [LinkedIn Profile](https://www.linkedin.com/in/yosr-bouhoula-5ab872151/)
+## Limitations
+
+- All inputs are self-reported survey answers, not clinical measurements.
+- The balanced sample does not reflect real prevalence, so precision in a real population would be lower.
+- Models use fixed hyperparameters, with a single train/test split and no cross-validation.
+- This is a course project, not a screening tool.
+
+## Tools
+
+Python, pandas, NumPy, scikit-learn, Keras/TensorFlow, statsmodels, Matplotlib, Seaborn.
+
+## Repository
+
+```
+├── diabetes_risk_models.ipynb   # full analysis
+├── requirements.txt
+└── README.md
+```
