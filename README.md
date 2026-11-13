@@ -13,18 +13,16 @@ Test set: 30% of 70,692 respondents, classes balanced 50/50.
 | Model | Accuracy | Recall | Precision | F1 |
 |---|---|---|---|---|
 | Gradient boosting | 0.755 | 0.796 | 0.734 | 0.764 |
-| Neural network (2 hidden layers) | 0.748 | 0.847 | 0.704 | 0.769* |
-| Logistic regression | 0.743 | 0.772 | 0.727 | 0.749 |
-| K-nearest neighbours (k = 20) | 0.732 | 0.751 | 0.721 | 0.735 |
-| Random forest (100 trees) | 0.724 | 0.755 | 0.709 | 0.731 |
-| Decision tree | 0.663 | 0.645 | 0.665 | 0.655 |
+| Neural network (2 hidden layers) | 0.753 | 0.794 | 0.732 | 0.761 |
+| Logistic regression | 0.749 | 0.768 | 0.737 | 0.752 |
+| K-nearest neighbours (k = 20) | 0.732 | 0.758 | 0.718 | 0.738 |
+| Random forest (100 trees) | 0.724 | 0.756 | 0.708 | 0.731 |
+| Decision tree | 0.662 | 0.645 | 0.665 | 0.655 |
 
-\* Computed from the test-set precision and recall.
-
-- Gradient boosting has the highest accuracy and precision.
-- The neural network finds the most true cases (recall 0.85) at the price of more false positives.
-- Logistic regression is within 1.2 points of the best model on accuracy while staying fully interpretable.
-- In the logistic regression, high blood pressure, high cholesterol and poorer self-rated general health carry the largest positive coefficients.
+- Gradient boosting performs best overall, with the highest accuracy, recall and F1 score.
+- The neural network is a close second on every metric.
+- Logistic regression has the highest precision and is within one point of the best accuracy while staying fully interpretable.
+- In the logistic regression (features scaled to 0–1, so coefficients are comparable), BMI, poorer self-rated general health and age carry the largest positive coefficients, followed by cholesterol check, high blood pressure and high cholesterol.
 
 ## Data
 
@@ -37,8 +35,8 @@ The data files are not stored in this repository; download them from the link ab
 1. Exploration: distributions, correlation heatmap, outlier check with the interquartile range.
 2. Four features dropped (`AnyHealthcare`, `NoDocbcCost`, `Income`, `Education`), leaving 17.
 3. 70/30 train/test split; min-max scaling fitted on the training set only.
-4. K-means clustering (elbow and silhouette) as an unsupervised look at structure in the data.
-5. Six supervised models, compared on accuracy, recall, precision and F1.
+4. K-means clustering (elbow and silhouette) on the scaled training features, as an unsupervised look at structure in the data.
+5. Six supervised models, all evaluated the same way on the test set: accuracy, recall, precision and F1 at a 0.5 threshold.
 6. Feature importance from logistic regression coefficients and tree-based models.
 
 ## Limitations
@@ -50,7 +48,7 @@ The data files are not stored in this repository; download them from the link ab
 
 ## Tools
 
-Python, pandas, NumPy, scikit-learn, Keras/TensorFlow, statsmodels, Matplotlib, Seaborn.
+Python, pandas, NumPy, scikit-learn, Keras, Matplotlib, Seaborn.
 
 ## Repository
 

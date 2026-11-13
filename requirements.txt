@@ -1,7 +1,8 @@
 pandas
 numpy
 scikit-learn
-tensorflow
-statsmodels
 matplotlib
 seaborn
+keras>=3
+jax  # Keras backend used for the saved results; TensorFlow or PyTorch also work
+jupyter
